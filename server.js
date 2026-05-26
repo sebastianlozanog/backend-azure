@@ -154,12 +154,9 @@ app.delete('/api/expenses/:id', async (req, res) => {
 
 // Resumen
 app.get('/api/statistics/summary', async (req, res) => {
-
     try {
-
         const total = await sql.query(`
-            SELECT ISNULL(SUM(amount),0) as total
-            FROM expenses
+            SELECT ISNULL(SUM(amount),0) as total FROM expenses
         `);
 
         const monthly = await sql.query(`
@@ -169,18 +166,30 @@ app.get('/api/statistics/summary', async (req, res) => {
             AND YEAR(date) = YEAR(GETDATE())
         `);
 
+        // ✅ Agrega esto — desglose por categoría
+        const byCategory = await sql.query(`
+            SELECT 
+                c.name,
+                c.color,
+                c.icon,
+                ISNULL(SUM(e.amount), 0) as total
+            FROM categories c
+            LEFT JOIN expenses e 
+                ON e.category_id = c.id
+                AND MONTH(e.date) = MONTH(GETDATE())
+                AND YEAR(e.date) = YEAR(GETDATE())
+            GROUP BY c.name, c.color, c.icon
+        `);
+
         res.json({
             total: total.recordset[0].total,
-            monthly: monthly.recordset[0].total
+            monthly: monthly.recordset[0].total,
+            byCategory: byCategory.recordset  // ✅ nuevo campo
         });
 
     } catch (err) {
-
         console.error(err);
-
-        res.status(500).json({
-            error: 'Error al obtener estadísticas'
-        });
+        res.status(500).json({ error: 'Error al obtener estadísticas' });
     }
 });
 
