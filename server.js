@@ -149,31 +149,6 @@ app.delete('/api/expenses/:id', async (req, res) => {
     }
 });
 
-// Editar gasto
-app.put('/api/expenses/:id', async (req, res) => {
-    const { id } = req.params;
-    const { description, amount, category_id, date } = req.body;
-
-    try {
-        const result = await sql.query(`
-            UPDATE expenses
-            SET 
-                description = '${description}',
-                amount = ${amount},
-                category_id = ${category_id},
-                date = '${date}'
-            OUTPUT INSERTED.*
-            WHERE id = ${id}
-        `);
-
-        res.json(result.recordset[0]);
-
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Error al actualizar gasto' });
-    }
-});
-
 // ================= ESTADÍSTICAS =================
 
 // Resumen
