@@ -8,10 +8,10 @@ const PORT = process.env.PORT || 5000;
 
 // Configuración de PostgreSQL
 const pool = new Pool({
-    user: process.env.DB_USER || 'postgresadmin',
-    host: process.env.DB_HOST || 'servidorgastos.postgres.database.azure.com',
-    database: process.env.DB_NAME || 'postgres',
-    password: process.env.DB_PASSWORD || 'Sebas27082005',
+    user: process.env.DB_USER || 'postgres',
+    host: process.env.DB_HOST || 'localhost',
+    database: process.env.DB_NAME || 'expense_tracker',
+    password: process.env.DB_PASSWORD || '27082005',
     port: process.env.DB_PORT || 5432,
 });
 
