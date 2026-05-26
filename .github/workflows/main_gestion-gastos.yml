@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     permissions:
       contents: read #This is required for actions/checkout
 
@@ -28,7 +28,7 @@ jobs:
           npm install
           npm run build --if-present
           npm run test --if-present
-
+      
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
@@ -51,13 +51,13 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_80263F6F582C47D4B2408C71C374F95E }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_CDAF38EE301345C2BF11DD7A457E2588 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_40E45D601AB9401FA9DFF9EB9ABBCA62 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_CB3A4927D4124D2E88317D328BF329FC }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_F6B32BEC845E4382B70857EE7513A032 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_D20BA3C48D1046E7A21647AEAA361A97 }}
 
       - name: 'Deploy to Azure Web App'
-        id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
+        id: deploy-to-webapp
         with:
           app-name: 'gestion-gastos'
           slot-name: 'Production'
